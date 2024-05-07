@@ -20,3 +20,14 @@ async def download_models():
     ollam_model_returncode = executor(cmd=download_ollam_model_cmd)
     if ollam_model_returncode == 0:
         faster_whisper.download_model(WHISPER_MODEL, whisper_model_path)
+
+
+async def audio_to_path(audio_file: UploadFile):
+    cwd_path = os.getcwd()
+    temp_dir = os.path.join(cwd_path, "temp")
+    os.makedirs(temp_dir, exist_ok=True)
+    temp_file_path = os.path.join(temp_dir, audio_file.filename)
+
+    with open(temp_file_path, "wb") as buffer:
+        shutil.copyfileobj(audio_file.file, buffer)
+    return temp_file_path

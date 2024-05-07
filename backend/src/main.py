@@ -25,9 +25,10 @@ async def root():
     return "server running!"
 
 
-@app.get("/chat")
-async def chat():
-    prompt = await voice2text()
+@app.post("/chat")
+async def chat(audio: UploadFile = File(...)):
+    print(audio.filename)
+    prompt = await voice2text(audio)
     stream = await chatting(prompt=prompt)
 
     # print(stream)
