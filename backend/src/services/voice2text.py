@@ -1,6 +1,8 @@
 from faster_whisper import WhisperModel
 from scripts.const import whisper_model_path
 from scripts.utils import audio_to_path
+from fastapi import UploadFile
+import os
 
 
 async def voice2text(audio: UploadFile):
