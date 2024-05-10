@@ -3,16 +3,16 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { blobToBase64 } from './utils';
 
-export const useVoiceRecorder = ({setStreamingData}:{
+export const useVoiceRecorder = ({ setStreamingData }: {
     setStreamingData: Dispatch<SetStateAction<string>>
 }) => {
     const [recording, setRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>(undefined);
     const [previewAudio, setPreviewAudio] = useState("");
     const chunks = useRef("");
-   
 
-  
+
+
     const startRecording = () => {
         if (mediaRecorder) {
             console.log("fired start")
@@ -41,26 +41,28 @@ export const useVoiceRecorder = ({setStreamingData}:{
                 },
             };
             setStreamingData("")
-            const response = await fetch("https://ideally-popular-dove.ngrok-free.app/proxy/8000/chat", fetchOptions);
+            const response = await fetch("https://ideally-popular-dove.ngrok-free.app/proxy/8000/chat", fetchOptions).then(res=>res.json());
 
-            const reader = response.body?.getReader()
+            setStreamingData(response?.message?.content)
 
-            const pump = async () => {
-                const { done, value } = await reader?.read();
-                if (done) {
-                    console.log('Streaming completed');
-                    return;
-                }
-                const chunk = new TextDecoder().decode(value)
-                // Update state with the new chunk of data
-               
-                console.log('Received chunk:', chunk);
-                setStreamingData(prevData => prevData + chunk);
-                // Continue reading the stream
-                await pump();
-            };
+            // const reader = response.body?.getReader()
 
-            await pump();
+            // const pump = async () => {
+            //     const { done, value } = await reader?.read();
+            //     if (done) {
+            //         console.log('Streaming completed');
+            //         return;
+            //     }
+            //     const chunk = new TextDecoder().decode(value,{stream: true})
+            //     // Update state with the new chunk of data
+
+            //     console.log('Received chunk:', chunk);
+            //     setStreamingData(prevData => prevData + chunk);
+            //     // Continue reading the stream
+            //     await pump();
+            // };
+
+            // await pump()
         } catch (error) {
             console.log(error);
         }
