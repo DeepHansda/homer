@@ -1,9 +1,11 @@
 import os
 import subprocess
+import shutil
 
 import faster_whisper
 from scripts.const import LLM_MODEL, WHISPER_MODEL, models_path, whisper_model_path
 from scripts.subprocess_executor import executor
+from fastapi import UploadFile
 
 
 async def setup_ollama():
