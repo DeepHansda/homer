@@ -1,7 +1,8 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { blobToBase64 } from './utils';
+import { AppContext } from '@/componets/mainLayout';
 
 export const useVoiceRecorder = ({ setStreamingData }: {
     setStreamingData: Dispatch<SetStateAction<string>>
@@ -10,6 +11,7 @@ export const useVoiceRecorder = ({ setStreamingData }: {
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>(undefined);
     const [previewAudio, setPreviewAudio] = useState("");
     const chunks = useRef("");
+    const {getMessages} = useContext(AppContext)
 
 
 
@@ -29,45 +31,6 @@ export const useVoiceRecorder = ({ setStreamingData }: {
         }
     };
 
-    const getText = async (blobData) => {
-        try {
-            const formData = new FormData()
-            formData.append("audio", blobData)
-            const fetchOptions = {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "ngrok-skip-browser-warning": "true",
-                },
-            };
-            setStreamingData("")
-            const response = await fetch("https://ideally-popular-dove.ngrok-free.app/proxy/8000/chat", fetchOptions).then(res=>res.json());
-
-            setStreamingData(response?.message?.content)
-
-            // const reader = response.body?.getReader()
-
-            // const pump = async () => {
-            //     const { done, value } = await reader?.read();
-            //     if (done) {
-            //         console.log('Streaming completed');
-            //         return;
-            //     }
-            //     const chunk = new TextDecoder().decode(value,{stream: true})
-            //     // Update state with the new chunk of data
-
-            //     console.log('Received chunk:', chunk);
-            //     setStreamingData(prevData => prevData + chunk);
-            //     // Continue reading the stream
-            //     await pump();
-            // };
-
-            // await pump()
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const initMediaListeners = (stream: MediaStream) => {
         const mediaRecorderInstance = new MediaRecorder(stream);
         mediaRecorderInstance.onstart = () => {
@@ -80,7 +43,7 @@ export const useVoiceRecorder = ({ setStreamingData }: {
             const blobData = new Blob(chunks.current, { type: "audio/wav" });
             console.log(blobData)
             const previewAudioURL = window.URL.createObjectURL(blobData);
-            getText(blobData)
+            getMessages(blobData)
             setPreviewAudio(previewAudioURL)
         };
         setMediaRecorder(mediaRecorderInstance);
