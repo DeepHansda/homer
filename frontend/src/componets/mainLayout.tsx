@@ -38,6 +38,7 @@ export default function MainLayout({
 
   const getMessages = async (blobData: Blob) => {
     const formData = new FormData();
+    console.log(blobData)
     formData.append("audio", blobData);
     const fetchOptions = {
       method: "POST",
@@ -64,7 +65,7 @@ export default function MainLayout({
     >
       <NextUIProvider>
         <NextThemesProvider attribute="class" defaultTheme="dark">
-          <div className="h-screen flex flex-col justify-between ">
+          <div className="">
             <AppNavbar />
             <div>{children}</div>
             <MicFooter />

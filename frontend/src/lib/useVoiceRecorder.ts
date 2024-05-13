@@ -4,14 +4,12 @@ import React, { Dispatch, SetStateAction, useContext, useEffect, useRef, useStat
 import { blobToBase64 } from './utils';
 import { AppContext } from '@/componets/mainLayout';
 
-export const useVoiceRecorder = ({ setStreamingData }: {
-    setStreamingData: Dispatch<SetStateAction<string>>
-}) => {
+export const useVoiceRecorder = () => {
     const [recording, setRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>(undefined);
     const [previewAudio, setPreviewAudio] = useState("");
     const chunks = useRef("");
-    const {getMessages} = useContext(AppContext)
+    const { getMessages } = useContext(AppContext)
 
 
 

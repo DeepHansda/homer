@@ -7,14 +7,8 @@ import { Button, Chip, Spacer } from "@nextui-org/react";
 import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
-  const [streamingData, setStreamingData] = useState("");
-  const {designations,getAllDesignations,messages} = useContext(AppContext)
-
-  const { recording, previewAudio, startRecording, stopRecording } =
-    useVoiceRecorder({ setStreamingData });
-
-  console.log(streamingData);
-
+  const {designations,messages,getAllDesignations} = useContext(AppContext);
+  console.log(messages)
   // const msg = new SpeechSynthesisUtterance();
   // const speak = (msg) => {
   //   stopRecording();
@@ -33,11 +27,10 @@ export default function Home() {
     getAllDesignations()
   },[])
 
-  console.log(previewAudio);
 
   return (
     <main className="px-8">
-      <div className="my-6">
+      {designations.length > 0  && <div className="my-6">
         {
           designations?.map((designation) => (
             <Button size="sm" radius="sm" variant="shadow" color="secondary" className="uppercase">
@@ -45,14 +38,11 @@ export default function Home() {
             </Button>
           ))
         }
-      </div>
+      </div>}
       
       <div className="flex flex-col gap-y-8">
-        {messages && <p>{messages}</p>}
-        <Chat/>
-        <Chat/>
-        <Chat/>
-        <Chat/>
+        {/* {messages && <p>{messages}</p>} */}
+      {messages.map((message) => (<Chat message={message}/>))}
 
       </div>
     </main>
