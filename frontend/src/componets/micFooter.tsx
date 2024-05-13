@@ -6,29 +6,33 @@ import Siriwave from "react-siriwave";
 export default function MicFooter() {
   const { startRecording, stopRecording, recording } = useVoiceRecorder();
   return (
-    <div className=" sticky bottom-0 text-center z-10">
+    <div className=" fixed w-auto bottom-0 text-center z-10">
       <Card isHoverable shadow="lg" fullWidth>
-        <CardHeader>
-          <p className="text-md font-bold">Ask me Something.</p>
-        </CardHeader>
         <CardBody className="flex items-center justify-center">
-
-        <div>{recording && <Siriwave theme="ios9" />}</div>
-        <div>
-          {recording ? (
-            <FaRegStopCircle
-              size={60}
-              cursor="pointer"
-              onClick={() => stopRecording()}
-            />
-          ) : (
-            <FaMicrophoneAlt
-              size={60}
-              cursor="pointer"
-              onClick={() => startRecording()}
-            />
-          )}
-        </div>
+          <div className="w-[200px] h-[90px]">
+            {recording && <Siriwave cover theme="ios9" />}
+          </div>
+          <div>
+            {recording ? (
+              <div className="w-full flex flex-grow flex-col justify-center items-center gap-y-4">
+                <FaRegStopCircle
+                  size={60}
+                  cursor="pointer"
+                  onClick={() => stopRecording()}
+                />
+                <p className="text-sm text capitalize">Stop Recording.</p>
+              </div>
+            ) : (
+              <div className="w-full flex flex-grow flex-col justify-center items-center gap-y-4">
+                <FaMicrophoneAlt
+                  size={60}
+                  cursor="pointer"
+                  onClick={() => startRecording()}
+                />
+                <p className="text-sm text capitalize">Ask Me Anything.</p>
+              </div>
+            )}
+          </div>
         </CardBody>
       </Card>
     </div>

@@ -4,13 +4,13 @@ import {
   CardBody,
   CardHeader,
   Chip,
-  Code,
   Divider,
-  Spacer,
+  Spacer
 } from "@nextui-org/react";
-import React from "react";
-import Markdown from "react-markdown";
-import SyntaxHighlighter from 'react-syntax-highlighter';
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export default function Chat({ message }: { message: {} }) {
   return (
@@ -58,10 +58,13 @@ export default function Chat({ message }: { message: {} }) {
             </div>
           </div>
           <Spacer y={4} />
-          <div className="text-sm">
-            <Markdown>
-          {message?.message?.content}
-            </Markdown>
+          <div className="text-xs rounded-md shadow-md bg-default p-4">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight, rehypeRaw]}
+            >
+              {message?.message?.content}
+            </ReactMarkdown>
             {/* <SyntaxHighlighter>
             {message?.message?.content}
             </SyntaxHighlighter> */}

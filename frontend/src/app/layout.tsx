@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import MainLayout from "@/componets/mainLayout";
+import { BackgroundBeams } from "@/componets/ui/background-beams";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
         <div className="max-w-screen-md h-screen flex-grow">
           <MainLayout>{children}</MainLayout>
         </div>
+        <BackgroundBeams />
       </body>
+
     </html>
   );
 }
