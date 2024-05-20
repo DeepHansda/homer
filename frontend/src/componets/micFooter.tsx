@@ -6,7 +6,7 @@ import Siriwave from "react-siriwave";
 export default function MicFooter() {
   const { startRecording, stopRecording, recording } = useVoiceRecorder();
   return (
-    <div className=" fixed w-auto bottom-0 text-center z-10">
+    <div className="sticky  bottom-0 z-10 text-center ">
       <Card isHoverable shadow="lg" fullWidth>
         <CardBody className="flex items-center justify-center">
           <div className="w-[200px] h-[90px]">

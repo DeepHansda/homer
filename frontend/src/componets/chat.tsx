@@ -16,7 +16,7 @@ export default function Chat({ message }: { message: {} }) {
   return (
     <div>
       <Card>
-        <CardHeader className="flex-col items-start gap-y-2">
+        {message?.prompts?.role == "user" && <CardHeader className="flex-col items-start gap-y-2">
           <div className="flex">
             <div>
               <Avatar
@@ -37,7 +37,7 @@ export default function Chat({ message }: { message: {} }) {
               <p className="text-xs">{message?.prompts?.content}</p>
             </Chip>
           </div>
-        </CardHeader>
+        </CardHeader>}
         <Divider />
         <CardBody>
           <div className="flex">

@@ -12,6 +12,7 @@ export const AppContext = createContext({
   designations: [],
   getMessages: (blobData: Blob) => {},
   messages: [],
+  assignDesignation: (desig: string) => {},
 });
 
 export default function MainLayout({
@@ -28,6 +29,7 @@ export default function MainLayout({
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
+      cache:"no-cache"
     };
     callApi("/get_designations", fetchOpt)
       .then((data) => setDesignations(data))
@@ -38,7 +40,7 @@ export default function MainLayout({
 
   const getMessages = async (blobData: Blob) => {
     const formData = new FormData();
-    console.log(blobData)
+    console.log(blobData);
     formData.append("audio", blobData);
     const fetchOptions = {
       method: "POST",
@@ -46,8 +48,24 @@ export default function MainLayout({
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
+      
     };
     callApi("/chat", fetchOptions)
+      .then((data) => setMessages((prevData) => [...prevData, data]))
+      .catch((err) => {
+        throw new Error(err);
+      });
+  };
+
+  const assignDesignation = async (desig: string) => {
+    const fetchOptions = {
+      method: "POST",
+      body: JSON.stringify({ designation: desig }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    callApi("make_assistant", fetchOptions)
       .then((data) => setMessages((prevData) => [...prevData, data]))
       .catch((err) => {
         throw new Error(err);
@@ -61,11 +79,12 @@ export default function MainLayout({
         designations: designations,
         getMessages: getMessages,
         messages: messages,
+        assignDesignation: assignDesignation,
       }}
     >
       <NextUIProvider>
         <NextThemesProvider attribute="class" defaultTheme="dark">
-          <div className="">
+          <div className="h-screen relative w-full">
             <AppNavbar />
             <div>{children}</div>
             <MicFooter />

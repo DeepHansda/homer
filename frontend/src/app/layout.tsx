@@ -22,7 +22,7 @@ export default function RootLayout({
         <div className="max-w-screen-md h-screen flex-grow">
           <MainLayout>{children}</MainLayout>
         </div>
-        <BackgroundBeams />
+        {/* <BackgroundBeams /> */}
       </body>
 
     </html>
