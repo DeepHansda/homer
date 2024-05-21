@@ -12,7 +12,7 @@ import json
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await setup_ollama()
-    # await download_models()
+    await download_models()
 
     print("started")
     yield

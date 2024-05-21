@@ -1,0 +1,15 @@
+{
+  "id": "deephansda/f6201a8471",
+  "title": "init_homer_backend",
+  "code_file": "INSERT_CODE_FILE_PATH_HERE",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

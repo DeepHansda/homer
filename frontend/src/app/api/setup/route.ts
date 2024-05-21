@@ -1,31 +1,40 @@
+import { createFile, execCommands } from "@/lib/utils";
 import { exec, ExecException } from "child_process";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
+import os from "os";
 
-export  function GET(request:NextRequest){
-    try{
-    const ex = exec("kaggle -h",(error)=>{
-        if(error){
-            throw new Error(error);
+const file = { "username": process.env.NAME, "key": process.env.KEY };
+const jsonFile = JSON.stringify(file)
+
+const systemType = os.type()
+const fileName = "kaggle.json"
+export async function GET(request: NextRequest) {
+    try {
+        const res = await execCommands("pip install kaggle")
+        console.log(res)
+        if (systemType == "Windows_NT") {
+            const userName = os.userInfo().username;
+            const path = `C:\\Users\\${userName}\\.kaggle\\${fileName}`
+            const result = createFile(path, jsonFile)
+           console.log(result)
+
         }
-    })
-    const stdout = ex.stdout?.on("data", (data) => {
-        return data
-    })
-    const execErr = ex.stderr?.on("error",(error)=>error)
-    const err = ex.stderr?.on("data",(data)=>data)
-    if (err) {
-        console.log("err",err)
-        return  NextResponse.json({err},{status:200})
+
+        if (systemType == "Linux") {
+            const path = `/root/.kaggle/${fileName}`
+            createFile(path, jsonFile)
+            const result = await execCommands('chmod 600 /root/.kaggle/kaggle.json')
+            console.log(result)
+        }
+
+        
+        const cmdres = await execCommands('kaggle -h')
+        console.log(cmdres)
+        // const jsonData = JSON.stringify(cmdres)
+        return new NextResponse(cmdres,{status:200})
     }
-    
-    if (execErr){
-        console.log("execErr",execErr)
-        return NextResponse.json({execErr},{status:200})
-    }
-    return Response.json({stdout},{status: 200})
-}
-    catch(err){
-        return new Response(err,{status:500,})
+    catch (err) {
+        return new Response(err, { status: 500, })
     }
 }
