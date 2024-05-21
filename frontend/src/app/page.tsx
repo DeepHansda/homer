@@ -1,49 +1,27 @@
 "use client";
 
-import { useVoiceRecorder } from "@/lib/useVoiceRecorder";
-import { useState } from "react";
+import Chat from "@/componets/chat";
+import { AppContext } from "@/componets/mainLayout";
+import { useContext } from "react";
+import Loading from "./loading";
 
 export default function Home() {
-  const [streamingData, setStreamingData] = useState("");
-
-  const { recording, previewAudio, startRecording, stopRecording } =
-    useVoiceRecorder({ setStreamingData });
-
-  console.log(streamingData);
-
-  // const msg = new SpeechSynthesisUtterance();
-  // const speak = (msg) => {
-  //   stopRecording();
-  //   msg.text = text;
-  //   window.speechSynthesis.speak(msg);
-  // };
-
-  // const stopVoice = () => {
-  //   window.speechSynthesis.cancel();
-  // }
-  // useEffect(() => {
-  //   speak(msg);
-  // }, [text]);
-
-  console.log(previewAudio);
+  const { designations, messages, getAllDesignations, assignDesignation } =
+    useContext(AppContext);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {recording && <p>recording.......</p>}
-      <div>
-        <button onClick={() => startRecording()}>start recording</button>
-      </div>
-      <div>
-        <button onClick={() => stopRecording()}>stop recording</button>
-      </div>
-      <video controls autoPlay name="media">
-        {previewAudio && <source src={previewAudio} type="audio/wav" />}
-      </video>
-      <p>{streamingData}</p>
+    <main className="px-8">
+      {/* <Loading/> */}
+      {/* <Suspense fallback={<Loading />}>
+        <Designations />
+      </Suspense> */}
 
-      {/* <button onClick={()=>stopVoice()}>
-        stop voice
-      </button> */}
+      <div className="flex flex-col gap-y-8">
+        {messages.map((message) => (
+          <Chat message={message} />
+        ))}
+      </div>
+      <Loading />
     </main>
   );
 }
