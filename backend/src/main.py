@@ -12,7 +12,7 @@ import json
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await setup_ollama()
-    # await download_models()
+    await download_models()
 
     print("started")
     yield
@@ -41,7 +41,6 @@ async def get_designations():
 
 @app.post("/make_assistant")
 async def make_assistan_ctrl(req: dict):
-    print(type(req))
     messages = await make_assistant(req["designation"])
     return JSONResponse(content=messages, status_code=status.HTTP_200_OK)
 
