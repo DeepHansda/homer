@@ -3,9 +3,13 @@ import { exec, ExecException } from "child_process";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 import os from "os";
+import path from "path";
 
+const { platform } = process;
+const locale = path[platform === `win32` ? `win32` : `posix`];
 const file = { "username": process.env.NAME, "key": process.env.KEY };
 const jsonFile = JSON.stringify(file)
+
 
 const systemType = os.type()
 const fileName = "kaggle.json"
@@ -17,7 +21,7 @@ export async function GET(request: NextRequest) {
             const userName = os.userInfo().username;
             const path = `C:\\Users\\${userName}\\.kaggle\\${fileName}`
             const result = createFile(path, jsonFile)
-           console.log(result)
+            console.log(result)
 
         }
 
@@ -28,11 +32,14 @@ export async function GET(request: NextRequest) {
             console.log(result)
         }
 
-        
-        const cmdres = await execCommands('kaggle -h')
+        const kagglePath = String.raw `\src\app\api\setup\kaggleNotebook`
+        let kaggleFileDir = path.join(process.cwd(), kagglePath)
+        kaggleFileDir = kaggleFileDir.split(path.sep).join(locale.sep);
+        console.log(kaggleFileDir)
+        const cmdres = await execCommands(`kaggle kernels push -p ${kaggleFileDir}`)
         console.log(cmdres)
         // const jsonData = JSON.stringify(cmdres)
-        return new NextResponse(cmdres,{status:200})
+        return new NextResponse(cmdres, { status: 200 })
     }
     catch (err) {
         return new Response(err, { status: 500, })

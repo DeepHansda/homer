@@ -1,5 +1,6 @@
-const { exec } = require('child_process');
-const fs = require("fs")
+import { exec } from "child_process"
+import fs from "fs"
+
 
 export async function blobToBase64(blob, callback: (base64audio: any) => void) {
   return new Promise((resolve, reject) => {
@@ -19,10 +20,10 @@ export async function blobToBase64(blob, callback: (base64audio: any) => void) {
   });
 }
 
-export const execCommands = async (commands:string) => {
+export const execCommands = async (commands: string) => {
   exec(commands, (error, stdout, stderr) => {
     if (error) {
-      console.error(`Error: ${error.message}`);
+      console.error(`Error: ${error}`);
       return error;
     }
     if (stderr) {
@@ -34,7 +35,7 @@ export const execCommands = async (commands:string) => {
   });
 }
 
-export const createFile = (path:string, fileData:string) => {
+export const createFile = (path: string, fileData: string) => {
   fs.writeFile(path, fileData, function (err) {
     if (err) {
       console.error('Error writing file', err);

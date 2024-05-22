@@ -31,7 +31,7 @@ export default function MainLayout({
       },
       cache:"no-cache"
     };
-    callApi("/get_designations", fetchOpt)
+    callApi("get_designations", fetchOpt)
       .then((data) => setDesignations(data))
       .catch((err) => {
         throw new Error(err);
