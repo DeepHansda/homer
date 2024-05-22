@@ -15,6 +15,8 @@ async def setup_ollama():
     if install_returncode == 0:  # Check if installation was successful
         start_cmd = ["ollama", "serve"]
         start_ollama = subprocess.Popen(start_cmd)
+        start_ollama = subprocess.Popen(start_cmd)
+
 
 
 async def download_models():
