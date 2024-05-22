@@ -31,7 +31,10 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return "server running!"
+    return JSONResponse(
+        content={"status": "ok", "message": "server started successfully!"},
+        status_code=status.HTTP_200_OK,
+    )
 
 
 @app.get("/get_designations")
@@ -41,7 +44,6 @@ async def get_designations():
 
 @app.post("/make_assistant")
 async def make_assistan_ctrl(req: dict):
-    print(type(req))
     messages = await make_assistant(req["designation"])
     return JSONResponse(content=messages, status_code=status.HTTP_200_OK)
 

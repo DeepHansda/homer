@@ -1,6 +1,6 @@
 import os
 
-LLM_MODEL = "llama3"
+LLM_MODEL = "llava"
 WHISPER_MODEL = "distil-medium.en"
 
 models_path = os.path.join(os.getcwd(), "models")
