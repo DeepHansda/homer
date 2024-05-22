@@ -31,7 +31,10 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return "server running!"
+    return JSONResponse(
+        content={"status": "ok", "message": "server started successfully!"},
+        status_code=status.HTTP_200_OK,
+    )
 
 
 @app.get("/get_designations")
