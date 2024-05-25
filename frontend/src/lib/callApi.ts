@@ -1,7 +1,7 @@
-export const callApi = async (path: string, fetchOpt: {}) => {
+export const callApi = async (path: string, fetchOpt: {}) :Promise<Response>=> {
     const apiURL = "https://leading-manually-cowbird.ngrok-free.app"
     try {
-        const response = await fetch(`${apiURL}/${path}`, fetchOpt).then(res => res.json())
+        const response = await fetch(`${apiURL}/${path}`, fetchOpt)
         return response
     } catch (error) {
         console.log(error)

@@ -20,18 +20,23 @@ export async function blobToBase64(blob, callback: (base64audio: any) => void) {
   });
 }
 
-export const execCommands = async (commands: string) => {
-  exec(commands, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error: ${error}`);
-      return error;
-    }
-    if (stderr) {
-      console.error(`Stderr: ${stderr}`);
-      return stderr;
-    }
-    console.log(`Stdout: ${stdout}`);
-    return stdout;
+export const execCommands = (commands:string) => {
+  return new Promise((resolve, reject) => {
+    exec(commands, (error, stdout, stderr) => {
+      let returnCode = 0;
+      if (error) {
+        // If there's an error, resolve with returnCode and error
+        return resolve({ returnCode, error: error.message });
+      }
+      if (stderr) {
+        // If there's stderr, set returnCode to 1 and resolve with stderr
+        returnCode = 1;
+        return resolve({ returnCode, stderr });
+      }
+      // If there's stdout, set returnCode to 2 and resolve with stdout
+      returnCode = 2;
+      return resolve({ returnCode, stdout });
+    });
   });
 }
 

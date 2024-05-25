@@ -6,6 +6,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import AppNavbar from "./appNavbar";
 import MicFooter from "./micFooter";
 import { callApi } from "@/lib/callApi";
+import { usePathname } from "next/navigation";
 
 export const AppContext = createContext({
   getAllDesignations: () => {},
@@ -13,6 +14,7 @@ export const AppContext = createContext({
   getMessages: (blobData: Blob) => {},
   messages: [],
   assignDesignation: (desig: string) => {},
+  newMessage: {},
 });
 
 export default function MainLayout({
@@ -22,17 +24,22 @@ export default function MainLayout({
 }) {
   const [designations, setDesignations] = useState([]);
   const [messages, setMessages] = useState([]);
-
+  const [newMessage, setNewMessage] = useState({});
+  const pathname = usePathname();
+  console.log(messages);
   const getAllDesignations = async () => {
     const fetchOpt = {
       method: "GET",
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
-      cache:"no-cache"
+      cache: "no-cache",
     };
     callApi("get_designations", fetchOpt)
-      .then((data) => setDesignations(data))
+      .then(async (res) => {
+        const data = await res.json();
+        setDesignations(data);
+      })
       .catch((err) => {
         throw new Error(err);
       });
@@ -48,10 +55,13 @@ export default function MainLayout({
       headers: {
         "ngrok-skip-browser-warning": "true",
       },
-      
     };
-    callApi("/chat", fetchOptions)
-      .then((data) => setMessages((prevData) => [...prevData, data]))
+    callApi("chat", fetchOptions)
+      .then(async (res) => {
+        const data = await res.json();
+        setNewMessage(data?.message);
+        setMessages((prevData) => [...prevData, data]);
+      })
       .catch((err) => {
         throw new Error(err);
       });
@@ -66,7 +76,12 @@ export default function MainLayout({
       },
     };
     callApi("make_assistant", fetchOptions)
-      .then((data) => setMessages((prevData) => [...prevData, data]))
+      .then(async (res) => {
+        console.log(res);
+        const data = await res.json();
+        setNewMessage(data?.message);
+        setMessages((prevData) => [...prevData, data]);
+      })
       .catch((err) => {
         throw new Error(err);
       });
@@ -80,6 +95,7 @@ export default function MainLayout({
         getMessages: getMessages,
         messages: messages,
         assignDesignation: assignDesignation,
+        newMessage: newMessage,
       }}
     >
       <NextUIProvider>
@@ -87,7 +103,9 @@ export default function MainLayout({
           <div className="h-screen relative w-full">
             <AppNavbar />
             <div>{children}</div>
-            <MicFooter />
+            <div className="fixed bottom-0 w- z-10 w-[1024px]">
+              {pathname != "/" && <MicFooter />}
+            </div>
           </div>
         </NextThemesProvider>
       </NextUIProvider>

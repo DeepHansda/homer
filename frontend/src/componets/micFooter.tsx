@@ -1,12 +1,16 @@
 import { useVoiceRecorder } from "@/lib/useVoiceRecorder";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import React from "react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaMicrophoneAlt, FaRegStopCircle } from "react-icons/fa";
 import Siriwave from "react-siriwave";
+import VoiceSynthesizer from "./voiceSynthesizer";
+import { AppContext } from "./mainLayout";
 export default function MicFooter() {
   const { startRecording, stopRecording, recording } = useVoiceRecorder();
+  
+    
   return (
-    <div className="sticky  bottom-0 z-10 text-center ">
+    <div>
       <Card isHoverable shadow="lg" fullWidth>
         <CardBody className="flex items-center justify-center">
           <div className="w-[200px] h-[90px]">
@@ -34,6 +38,9 @@ export default function MicFooter() {
             )}
           </div>
         </CardBody>
+        <CardFooter>
+          <VoiceSynthesizer displaySettings={true}/>
+        </CardFooter>
       </Card>
     </div>
   );
