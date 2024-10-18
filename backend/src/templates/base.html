@@ -1,25 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Circle Visualizer with HTMX</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <script src="https://unpkg.com/htmx.org"></script>
+    <title>Voice Circle Visualizer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DeepHansda/homer@master/backend/src/static/css/style.css">
 </head>
+
 <body>
     <div class="visualizer-container">
         <canvas id="visualizer"></canvas>
     </div>
-    <button id="start-btn">Start Visualizer</button>
-    <button id="stop-btn" disabled>Stop & Upload</button>
-
-    <form id="uploadForm" hx-post="/upload-audio/" hx-target="#status" enctype="multipart/form-data">
-        <input id="audioInput" type="hidden" name="file">
-    </form>
-    
-    <p id="status"></p>
-
-    <script src="/static/script.js"></script>
+    <button onclick="startVisualizer()">Start Visualizer</button>
+    <script src="https://cdn.jsdelivr.net/gh/DeepHansda/homer@master/backend/src/static/js/script.js"></script>
 </body>
+
 </html>
