@@ -17,9 +17,9 @@ const silenceTimeoutDuration = 3000; // Stop recording after 3 seconds of silenc
 
 const startBtn = document.getElementById('start-btn');
 const stopBtn = document.getElementById('stop-btn');
-const statusText = document.getElementById('upload-status');
-const uploadForm = document.getElementById('upload-form');
-const audioFileInput = document.getElementById('audio-file-input');
+const audioInput = document.getElementById('audioInput'); // Hidden input field for HTMX form
+const uploadForm = document.getElementById('uploadForm'); // HTMX form
+const statusText = document.getElementById('status');
 
 // Start visualizer and recording
 startBtn.addEventListener('click', async () => {
@@ -46,10 +46,7 @@ startBtn.addEventListener('click', async () => {
         }
     };
 
-    mediaRecorder.onstop = () => {
-        // Upload the recorded file via HTMX when the recording stops
-        uploadAudio();
-    };
+    mediaRecorder.onstop = handleStopRecording;
     
     // Start recording
     mediaRecorder.start();
@@ -130,21 +127,18 @@ function drawCircleVisualizer() {
     ctx.closePath();
 }
 
-// Convert the recorded audio to a Blob and trigger HTMX upload
-function uploadAudio() {
+// Handle stop recording
+function handleStopRecording() {
     const blob = new Blob(recordedChunks, { type: 'audio/webm' });
 
-    // Create a file-like object and set it to the hidden input
-    const file = new File([blob], 'recording.webm', { type: 'audio/webm' });
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(file);
-    audioFileInput.files = dataTransfer.files;
+    // Convert blob to base64 and set it in the hidden form input
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+        const base64data = reader.result.split(',')[1]; // Get base64 string
+        audioInput.value = base64data; // Set hidden input value
+        uploadForm.submit(); // Automatically trigger the HTMX form submission
+    };
 
-    // Submit the HTMX form
-    uploadForm.requestSubmit();
-
-    // Reset state
     recordedChunks = [];
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
 }

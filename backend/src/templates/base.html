@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice Circle Visualizer with HTMX</title>
     <link rel="stylesheet" href="/static/style.css">
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <script src="https://unpkg.com/htmx.org"></script>
 </head>
 <body>
     <div class="visualizer-container">
@@ -14,12 +14,11 @@
     <button id="start-btn">Start Visualizer</button>
     <button id="stop-btn" disabled>Stop & Upload</button>
 
-    <form id="upload-form" hx-post="/upload-audio/" hx-trigger="submit" hx-swap="outerHTML">
-        <input type="file" id="audio-file-input" name="file" hidden>
-        <button type="submit" id="upload-btn" style="display:none;">Upload</button>
+    <form id="uploadForm" hx-post="/upload-audio/" hx-target="#status" enctype="multipart/form-data">
+        <input id="audioInput" type="hidden" name="file">
     </form>
-
-    <div id="upload-status"></div>
+    
+    <p id="status"></p>
 
     <script src="/static/script.js"></script>
 </body>
