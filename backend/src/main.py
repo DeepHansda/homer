@@ -2,10 +2,14 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, status, UploadFile, File
 from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.requests import Request
 from scripts.utils import download_models, setup_ollama
 from services.text2text import chatting, make_assistant, assistants
 from services.voice2text import voice2text
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
 import json
 
 
@@ -20,6 +24,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates("./templates")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,11 +37,8 @@ app.add_middleware(
 
 
 @app.get("/")
-async def root():
-    return JSONResponse(
-        content={"status": "ok", "message": "server started successfully!"},
-        status_code=status.HTTP_200_OK,
-    )
+async def root(request: Request):
+    return templates.TemplateResponse("base.html", {"request": request})
 
 
 @app.get("/get_designations")
